@@ -1,4 +1,4 @@
-import type {SanityClient} from '@sanity/client'
+import type {SanityClient} from 'sanity'
 import groq from 'groq'
 
 export const SECRET_ID = `sanity.preview.secret`

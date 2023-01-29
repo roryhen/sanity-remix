@@ -14,9 +14,6 @@ import groq from 'groq'
 
 import {getClient} from '~/sanity/client'
 import {homeZ} from '~/types/home'
-import {themePreferenceCookie} from '~/cookies'
-import {z} from 'zod'
-import {getBodyClassNames} from './lib/getBodyClassNames'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -26,28 +23,33 @@ export const meta: MetaFunction = () => ({
 export const links: LinksFunction = () => {
   return [
     {rel: 'preconnect', href: 'https://cdn.sanity.io'},
-    {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous'},
-    {rel: 'preconnect', href: 'https://fonts.googleapis.com', crossOrigin: 'anonymous'},
     {
-      href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@500;700;800&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap',
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous',
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com',
+      crossOrigin: 'anonymous',
+    },
+    {
+      href: 'https://fonts.googleapis.com/css2?family=Barlow:wght@600&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap',
       rel: 'stylesheet',
     },
   ]
 }
 
 export const loader = async ({request}: LoaderArgs) => {
-  // Dark/light mode
-  const cookieHeader = request.headers.get('Cookie')
-  const cookie = (await themePreferenceCookie.parse(cookieHeader)) || {}
-  const themePreference = z
-    .union([z.literal('dark'), z.literal('light')])
-    .optional()
-    .parse(cookie.themePreference)
-
   // Sanity content throughout the site
   const query = groq`*[_id == "home"][0]{
     title,
-    siteTitle
+    siteTitle,
+    "logo": logo.asset->url,
+    socialLinks[]{
+      url,
+      icon,
+    }
   }`
   const home = await getClient()
     .fetch(query)
@@ -55,7 +57,6 @@ export const loader = async ({request}: LoaderArgs) => {
 
   return json({
     home,
-    themePreference,
     ENV: {
       SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
       SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
@@ -65,11 +66,10 @@ export const loader = async ({request}: LoaderArgs) => {
 }
 
 export default function App() {
-  const {ENV, themePreference} = useLoaderData<typeof loader>()
+  const {ENV} = useLoaderData<typeof loader>()
 
   const {pathname} = useLocation()
   const isStudioRoute = pathname.startsWith('/studio')
-  const bodyClassNames = getBodyClassNames(themePreference)
 
   return (
     <html lang="en">
@@ -78,7 +78,7 @@ export default function App() {
         <Links />
         {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
-      <body className={bodyClassNames}>
+      <body>
         <Outlet />
         <ScrollRestoration />
         <script

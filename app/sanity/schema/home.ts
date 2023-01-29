@@ -15,11 +15,18 @@ export default defineType({
       name: 'siteTitle',
       type: 'string',
     }),
+    defineField({
+      name: 'logo',
+      type: 'image',
+    }),
+    defineField({
+      name: 'hero',
+      type: 'image',
+    }),
+    defineField({
+      name: 'socialLinks',
+      type: 'array',
+      of: [{type: 'social'}],
+    }),
   ],
-  preview: {
-    select: {
-      title: 'title',
-      artist: 'siteTitle',
-    },
-  },
 })

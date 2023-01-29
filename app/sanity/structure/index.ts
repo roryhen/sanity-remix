@@ -1,6 +1,6 @@
 import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
 import Iframe from 'sanity-plugin-iframe-pane'
-import {Disc, Users, Tags, Home} from 'lucide-react'
+import {Users, Home, ConciergeBell, FlagTriangleRight} from 'lucide-react'
 
 import {projectDetails} from '~/sanity/projectDetails'
 import type {SanityDocumentWithSlug} from '~/sanity/structure/resolvePreviewUrl'
@@ -15,10 +15,9 @@ export const structure: StructureResolver = (S) =>
       S.documentListItem().schemaType('home').icon(Home).id('home').title('Home'),
       S.divider(),
       // Document lists
-      S.documentTypeListItem('record').title('Records').icon(Disc),
-      S.documentTypeListItem('artist').title('Artists').icon(Users),
-      S.divider(),
-      S.documentTypeListItem('genre').title('Genres').icon(Tags),
+      S.documentTypeListItem('prompt').title('Prompts').icon(FlagTriangleRight),
+      S.documentTypeListItem('service').title('Services').icon(ConciergeBell),
+      S.documentTypeListItem('testimonial').title('Testimonials').icon(Users),
     ])
 
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType, getClient}) => {

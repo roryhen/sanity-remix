@@ -1,12 +1,16 @@
-import {Users} from 'lucide-react'
+import {ConciergeBell} from 'lucide-react'
 import {defineType, defineField} from 'sanity'
 
 export default defineType({
-  name: 'artist',
-  title: 'Artist',
+  name: 'service',
+  title: 'Service',
   type: 'document',
-  icon: Users,
+  icon: ConciergeBell,
   fields: [
+    defineField({
+      name: 'image',
+      type: 'image',
+    }),
     defineField({
       name: 'title',
       type: 'string',
@@ -19,9 +23,8 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'image',
-      type: 'image',
-      options: {hotspot: true},
+      name: 'description',
+      type: 'text',
     }),
   ],
 })

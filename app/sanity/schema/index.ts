@@ -1,7 +1,7 @@
-import artist from '~/sanity/schema/artist'
-import genre from '~/sanity/schema/genre'
 import home from '~/sanity/schema/home'
-import record from '~/sanity/schema/record'
-import track from '~/sanity/schema/track'
+import testimonial from '~/sanity/schema/testimonial'
+import service from '~/sanity/schema/service'
+import prompt from '~/sanity/schema/prompt'
+import social from '~/sanity/schema/social'
 
-export default [record, artist, track, genre, home]
+export default [home, prompt, service, testimonial, social]
