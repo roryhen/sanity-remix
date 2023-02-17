@@ -10,10 +10,9 @@ import {
   useLoaderData,
   useLocation,
 } from '@remix-run/react'
-import groq from 'groq'
-
 import {getClient} from '~/sanity/client'
 import {homeZ} from '~/types/home'
+import {homeQuery} from './queries/home.groq'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -41,18 +40,8 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({request}: LoaderArgs) => {
-  // Sanity content throughout the site
-  const query = groq`*[_id == "home"][0]{
-    title,
-    siteTitle,
-    "logo": logo.asset->url,
-    socialLinks[]{
-      url,
-      icon,
-    }
-  }`
   const home = await getClient()
-    .fetch(query)
+    .fetch(homeQuery)
     .then((res) => (res ? homeZ.parse(res) : null))
 
   return json({
@@ -78,7 +67,7 @@ export default function App() {
         <Links />
         {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
-      <body>
+      <body className="text-base">
         <Outlet />
         <ScrollRestoration />
         <script

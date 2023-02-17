@@ -1,14 +1,11 @@
 import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
-import {useLoaderData} from '@remix-run/react'
-import groq from 'groq'
+import {useRouteLoaderData} from '@remix-run/react'
 import Layout from '~/components/Layout'
-import Title from '~/components/Title'
-import {getClient} from '~/sanity/client'
 import styles from '~/styles/app.css'
-import {useRouteData} from 'remix-utils'
 import type {HomeDocument} from '~/types/home'
-import {heroZ} from '~/types/home'
+import Hero from '~/components/Hero'
+import ImageWithText from '~/components/ImageWithText'
 import {getSession} from '~/sessions'
 
 export const links: LinksFunction = () => {
@@ -28,27 +25,22 @@ export const loader = async ({params, request}: LoaderArgs) => {
   const token = session.get('token')
   const preview = Boolean(token)
 
-  const query = groq`*[_id == "home"][0]{
-    "image": hero.asset->url
-  }`
-
-  const hero = await getClient(preview)
-    .fetch(query)
-    .then((res) => (res ? heroZ.parse(res) : null))
-
-  return json({hero})
+  return json({})
 }
 
 export default function Index() {
-  const {hero} = useLoaderData<typeof loader>()
-  const {home} = useRouteData(`root`) as {home: HomeDocument}
+  const {home} = useRouteLoaderData(`root`) as {home: HomeDocument}
 
   return (
     <Layout>
-      <div className="grid grid-cols-1 gap-6 md:gap-12">
-        {home.title ? <Title>{home.title}</Title> : null}
-        {hero?.image && <img src={hero.image} alt="Close up of orange slice" />}
-      </div>
+      <Hero
+        darkBG
+        title={home.title}
+        image={{id: home?.heroImage ?? '', alt: 'Close up of orange slice'}}
+      />
+      <ImageWithText heading="" paragraph="">
+        <img src="" alt="" />
+      </ImageWithText>
     </Layout>
   )
 }
