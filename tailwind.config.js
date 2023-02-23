@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         'soft-red': 'hsl(7, 99%, 70%)',
+        'very-light-yellow': 'hsl(20, 100%, 99%)',
         yellow: 'hsl(51, 100%, 49%)',
         'dark-desat-cyan': 'hsl(167, 40%, 24%)',
         'dark-blue': 'hsl(198, 62%, 26%)',

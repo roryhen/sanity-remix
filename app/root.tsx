@@ -12,7 +12,7 @@ import {
 } from '@remix-run/react'
 import {getClient} from '~/sanity/client'
 import {homeZ} from '~/types/home'
-import {homeQuery} from './queries/home.groq'
+import {getHome, homeQuery} from './queries/home.groq'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -40,9 +40,7 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({request}: LoaderArgs) => {
-  const home = await getClient()
-    .fetch(homeQuery)
-    .then((res) => (res ? homeZ.parse(res) : null))
+  const home = await getHome()
 
   return json({
     home,
@@ -67,7 +65,7 @@ export default function App() {
         <Links />
         {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
-      <body className="text-base">
+      <body className="bg-very-light-yellow text-base leading-relaxed">
         <Outlet />
         <ScrollRestoration />
         <script

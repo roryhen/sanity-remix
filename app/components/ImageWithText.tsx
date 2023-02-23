@@ -1,19 +1,33 @@
+import {Link} from '@remix-run/react'
+
 type Props = {
-  imageOnLeft?: boolean
-  heading?: string
-  paragraph?: string
+  imageOnRight?: boolean
+  heading?: string | null
+  paragraph?: string | null
   children?: React.ReactNode
 }
 
 export default function ImageWithText(props: Props) {
   return (
     <section>
-      <div className={`flex flex-col`}>
-        <div>
-          {props.heading && <h2>{props.heading}</h2>}
-          {props.paragraph && <p>{props.paragraph}</p>}
+      <div className="grid place-items-center lg:auto-cols-fr lg:grid-flow-col">
+        {props.children && (
+          <div className={`${props.imageOnRight ? ' lg:col-start-2' : ''}`}>{props.children}</div>
+        )}
+        <div className="grid max-w-xl justify-items-center  gap-6 px-8 py-12 text-center lg:max-w-md lg:justify-items-start lg:text-left">
+          {props.heading && (
+            <h2 className="font-serif text-3xl leading-tight text-very-dark-desat-blue">
+              {props.heading}
+            </h2>
+          )}
+          {props.paragraph && <p className=" text-dark-gray-blue">{props.paragraph}</p>}
+          <Link
+            to="#learn-more"
+            className="font-serif text-sm uppercase tracking-wider after:-z-10 after:-mx-2 after:-mt-2 after:block after:h-2 after:rounded-full after:bg-yellow after:opacity-40"
+          >
+            Learn More
+          </Link>
         </div>
-        {props.children && <div>{props.children}</div>}
       </div>
     </section>
   )

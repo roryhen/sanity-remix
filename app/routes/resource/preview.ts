@@ -52,6 +52,7 @@ export const loader = async ({request}: LoaderArgs) => {
     return new Response('Invalid slug', {status: 401})
   }
 
+  // @ts-expect-error
   const validSecret = await getSecret(previewClient, SECRET_ID, false)
 
   if (validSecret !== secret) {
