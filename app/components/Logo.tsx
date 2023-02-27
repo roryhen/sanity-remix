@@ -2,16 +2,22 @@ import {Link, useRouteLoaderData} from '@remix-run/react'
 import {urlFor} from '~/lib/imageBuilder'
 import type {GlobalDocument} from '~/types/global'
 
-export default function Logo() {
+type Props = {
+  footer?: boolean
+}
+
+export default function Logo(props: Props) {
   const {global} = useRouteLoaderData('root') as {global: GlobalDocument}
+
+  const logo = props.footer ? global.footerLogo : global.logo
 
   return (
     <p className="text-xl font-bold">
       <Link to="/">
-        {global.logoImage ? (
+        {logo ? (
           <img
-            className=""
-            src={urlFor(global.logoImage).url()}
+            className={props.footer ? 'w-48' : undefined}
+            src={urlFor(logo).url()}
             alt={global.siteTitle ?? 'Sunnyside'}
             title={global.siteTitle ?? 'Sunnyside'}
           />

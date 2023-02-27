@@ -14,6 +14,10 @@ export default defineType({
       type: 'image',
     }),
     defineField({
+      name: 'footerLogo',
+      type: 'image',
+    }),
+    defineField({
       name: 'socialLinks',
       type: 'array',
       of: [{type: 'social'}],

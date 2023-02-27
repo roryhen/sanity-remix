@@ -4,7 +4,8 @@ import {globalZ} from '~/types/global'
 
 export const globalQuery = groq`*[_type == "global"][0]{
   siteTitle,
-  "logoImage": logo.asset._ref,
+  "logo": logo.asset._ref,
+  "footerLogo": footerLogo.asset._ref,
   socialLinks[]{
     url,
     icon,

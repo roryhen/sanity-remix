@@ -1,24 +1,54 @@
+import {Link, useRouteLoaderData} from '@remix-run/react'
 import Logo from '~/components/Logo'
+import type {GlobalDocument} from '~/types/global'
+import {Facebook, Instagram, Twitter, Youtube} from 'lucide-react'
+
+const icons = {
+  facebook: Facebook,
+  instagram: Instagram,
+  twitter: Twitter,
+  pinterest: Youtube,
+}
 
 export default function Footer() {
+  const {global} = useRouteLoaderData('root') as {global: GlobalDocument}
+
   return (
-    <header className="border-t border-gray-100 transition-colors duration-1000 ease-in-out dark:border-gray-900">
-      <div className="container mx-auto flex items-center justify-between p-4 lg:px-12">
-        <Logo />
-        <div className="flex flex-1 flex-col items-end justify-end gap-2 text-sm md:flex-row md:items-center md:gap-5">
-          <a className="hover:text-cyan-600 dark:hover:text-cyan-200" href="/studio">
-            Log in to Sanity Studio v3
-          </a>
-          <a className="hover:text-cyan-600 dark:hover:text-cyan-200" href="https://sanity.io">
-            Sign up free at Sanity.io
-          </a>
-          <a
-            className="hover:text-cyan-600 dark:hover:text-cyan-200"
-            href="https://github.com/SimeonGriggs/remix-sanity-studio-v3"
-          >
-            Clone this project on GitHub
-          </a>
-        </div>
+    <header className="bg-very-light-green text-dark-mod-green">
+      <div className="container mx-auto grid justify-items-center gap-10 py-16 px-8">
+        <Logo footer />
+        <nav aria-label="footer">
+          <ul className="flex items-center gap-8">
+            <li>
+              <Link to="#about" className=" p-3">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="#services" className=" p-3">
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link to="#projects" className=" p-3">
+                Projects
+              </Link>
+            </li>
+          </ul>
+        </nav>
+        <ul className="mt-10 flex gap-6">
+          {global.socialLinks.map((link, i) => {
+            if (!link.icon) return null
+            const Icon = icons[link.icon as keyof typeof icons]
+            return (
+              <li key={i}>
+                <a href={link.url ?? ''} rel="noopener" title={link.icon}>
+                  <Icon />
+                </a>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </header>
   )

@@ -1,6 +1,6 @@
 import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
-import {useLoaderData, useRouteLoaderData} from '@remix-run/react'
+import {useLoaderData} from '@remix-run/react'
 import Hero from '~/components/Hero'
 import ImageWithCaption from '~/components/ImageWithCaption'
 import ImageWithText from '~/components/ImageWithText'
@@ -69,7 +69,7 @@ export default function Index() {
           heading={prompt.title}
           paragraph={prompt.description}
           imageOnRight={i % 2 === 0}
-          accentColor={i % 2 === 0 ? 'after:bg-red-300' : 'after:bg-yellow'}
+          accentColor={i % 2 === 0 ? 'after:bg-soft-red' : 'after:bg-yellow'}
           key={i}
         >
           {prompt.image && (
@@ -127,7 +127,7 @@ export default function Index() {
           (item, i) =>
             item.image && (
               <img
-                className="aspect-square h-full w-full object-cover lg:aspect-auto"
+                className="-ml-[0.1px] aspect-square h-full w-full object-cover lg:aspect-auto"
                 src={urlFor(item.image).width(500).auto('format').url()}
                 alt=""
                 key={i}
