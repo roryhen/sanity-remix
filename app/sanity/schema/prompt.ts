@@ -1,11 +1,9 @@
-import {FlagTriangleRight} from 'lucide-react'
 import {defineType, defineField} from 'sanity'
 
 export default defineType({
   name: 'prompt',
   title: 'Prompt',
   type: 'document',
-  icon: FlagTriangleRight,
   fields: [
     defineField({
       name: 'image',

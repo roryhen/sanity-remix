@@ -1,23 +1,22 @@
 import {Link, useRouteLoaderData} from '@remix-run/react'
 import {urlFor} from '~/lib/imageBuilder'
-
-import type {HomeDocument} from '~/types/home'
+import type {GlobalDocument} from '~/types/global'
 
 export default function Logo() {
-  const {home} = useRouteLoaderData(`root`) as {home: HomeDocument}
+  const {global} = useRouteLoaderData('root') as {global: GlobalDocument}
 
   return (
     <p className="text-xl font-bold">
       <Link to="/">
-        {home.logoImage ? (
+        {global.logoImage ? (
           <img
             className=""
-            src={urlFor(home.logoImage).url()}
-            alt={home.siteTitle ?? 'Sunnyside'}
-            title={home.siteTitle ?? 'Sunnyside'}
+            src={urlFor(global.logoImage).url()}
+            alt={global.siteTitle ?? 'Sunnyside'}
+            title={global.siteTitle ?? 'Sunnyside'}
           />
         ) : (
-          home.siteTitle
+          global.siteTitle
         )}
       </Link>
     </p>

@@ -1,22 +1,22 @@
 import {defineType, defineField} from 'sanity'
 
 export default defineType({
-  name: 'home',
-  title: 'Home',
+  name: 'global',
+  title: 'Global',
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
+      name: 'siteTitle',
       type: 'string',
     }),
     defineField({
-      name: 'hero',
+      name: 'logo',
       type: 'image',
     }),
     defineField({
-      name: 'gallery',
+      name: 'socialLinks',
       type: 'array',
-      of: [{type: 'image'}],
+      of: [{type: 'social'}],
     }),
   ],
 })

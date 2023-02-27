@@ -1,11 +1,9 @@
-import {Users} from 'lucide-react'
 import {defineType, defineField} from 'sanity'
 
 export default defineType({
   name: 'testimonial',
   title: 'Testimonial',
   type: 'document',
-  icon: Users,
   fields: [
     defineField({
       name: 'avatar',

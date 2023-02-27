@@ -7,7 +7,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-10 bg-cyan">
+    <header className="fixed top-0 left-0 right-0 z-10 bg-cyan">
       <div className="container mx-auto flex items-center justify-between px-4 py-7 lg:px-12">
         <Logo />
         <Navigation isShown={isOpen} />

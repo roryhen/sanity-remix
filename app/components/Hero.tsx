@@ -2,7 +2,7 @@ import arrowSVG from 'public/icons/icon-arrow-down.svg'
 import {urlFor} from '~/lib/imageBuilder'
 
 type Props = {
-  title: string | null
+  title?: string | null
   darkBG?: boolean
   image?: {
     id: string
@@ -14,7 +14,7 @@ export default function Hero(props: Props) {
   return (
     <section className="bg-cyan">
       <div
-        className={`relative mx-auto grid max-h-[40rem] min-h-[80vh] grid-rows-[1fr_1fr_2fr_2fr] place-items-center lg:container lg:min-h-0 ${
+        className={`relative mx-auto grid min-h-[90vh] grid-rows-4 justify-items-center lg:container lg:min-h-0 lg:grid-rows-[1fr_1fr_1fr_2fr] ${
           props.darkBG ? 'text-white' : ''
         }`}
       >
@@ -25,10 +25,16 @@ export default function Hero(props: Props) {
             alt={props.image?.alt}
           />
         )}
-        <h1 className="col-start-1 row-start-2 px-4 text-center font-serif text-4xl uppercase leading-tight tracking-widest lg:text-5xl">
+        <h1 className="col-start-1 row-start-2 self-center p-4 text-center font-serif text-4xl uppercase leading-tight tracking-[0.3em] lg:text-6xl">
           {props.title}
         </h1>
-        <img className="col-start-1 row-start-3" src={arrowSVG} alt="" width="36" height="114" />
+        <img
+          className="col-start-1 row-start-3 self-center"
+          src={arrowSVG}
+          alt=""
+          width="36"
+          height="114"
+        />
       </div>
     </section>
   )

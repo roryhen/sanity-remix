@@ -4,12 +4,9 @@ import {homeZ} from '~/types/home'
 
 export const homeQuery = groq`*[_type == "home"][0]{
   title,
-  siteTitle,
-  "logoImage": logo.asset._ref,
   "heroImage": hero.asset._ref,
-  socialLinks[]{
-    url,
-    icon,
+  gallery[]{
+    "image": asset._ref,
   }
 }`
 

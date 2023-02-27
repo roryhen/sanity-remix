@@ -10,9 +10,7 @@ import {
   useLoaderData,
   useLocation,
 } from '@remix-run/react'
-import {getClient} from '~/sanity/client'
-import {homeZ} from '~/types/home'
-import {getHome, homeQuery} from './queries/home.groq'
+import {getGlobal} from './queries/global.groq'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -40,10 +38,10 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({request}: LoaderArgs) => {
-  const home = await getHome()
+  const global = await getGlobal()
 
   return json({
-    home,
+    global,
     ENV: {
       SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
       SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,

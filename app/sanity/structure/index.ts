@@ -1,6 +1,6 @@
 import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
 import Iframe from 'sanity-plugin-iframe-pane'
-import {Users, Home, ConciergeBell, FlagTriangleRight} from 'lucide-react'
+import {Users, Home, ConciergeBell, FlagTriangleRight, Globe} from 'lucide-react'
 
 import {projectDetails} from '~/sanity/projectDetails'
 import type {SanityDocumentWithSlug} from '~/sanity/structure/resolvePreviewUrl'
@@ -12,6 +12,7 @@ export const structure: StructureResolver = (S) =>
     .title('Content')
     .items([
       // Singleton, home page curation
+      S.documentListItem().schemaType('global').icon(Globe).id('global').title('Global'),
       S.documentListItem().schemaType('home').icon(Home).id('home').title('Home'),
       S.divider(),
       // Document lists
