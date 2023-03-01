@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import Hero from '~/components/Hero'
@@ -12,13 +12,8 @@ import {getPrompts} from '~/queries/prompts.groq'
 import {getServices} from '~/queries/services.groq'
 import {getTestimonials} from '~/queries/testimonials.groq'
 import {getSession} from '~/sessions'
-import styles from '~/styles/app.css'
 import type {GlobalDocument} from '~/types/global'
 import type {HomeDocument} from '~/types/home'
-
-export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: styles}]
-}
 
 export const meta: MetaFunction = (data) => {
   const global = data.parentsData.root.global as GlobalDocument

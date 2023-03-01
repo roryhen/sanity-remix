@@ -10,6 +10,7 @@ import {
   useLoaderData,
   useLocation,
 } from '@remix-run/react'
+import styles from '~/tailwind.css'
 import {getGlobal} from './queries/global.groq'
 
 export const meta: MetaFunction = () => ({
@@ -19,6 +20,7 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => {
   return [
+    {rel: 'stylesheet', href: styles},
     {rel: 'preconnect', href: 'https://cdn.sanity.io'},
     {
       rel: 'preconnect',
