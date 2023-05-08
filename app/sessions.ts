@@ -6,9 +6,8 @@ const {getSession, commitSession, destroySession} = createCookieSessionStorage({
     name: '__session',
     httpOnly: true,
     maxAge: 60,
-    path: '/',
     sameSite: 'lax',
-    secrets: [String(process.env.SANITY_PREVIEW_SECRET)],
+    secrets: [],
     secure: true,
   },
 })

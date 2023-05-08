@@ -1,6 +1,7 @@
 import type {LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
+import ExitPreview from '~/components/ExitPreview'
 import Hero from '~/components/Hero'
 import ImageWithCaption from '~/components/ImageWithCaption'
 import ImageWithText from '~/components/ImageWithText'
@@ -50,7 +51,7 @@ export const loader = async ({params, request}: LoaderArgs) => {
 }
 
 export default function Index() {
-  const {home, prompts, services, testimonials} = useLoaderData<typeof loader>()
+  const {preview, home, prompts, services, testimonials} = useLoaderData<typeof loader>()
 
   return (
     <Layout>
@@ -130,6 +131,7 @@ export default function Index() {
             )
         )}
       </div>
+      {preview && <ExitPreview />}
     </Layout>
   )
 }
