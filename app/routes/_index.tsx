@@ -1,4 +1,4 @@
-import type {LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {LoaderArgs, V2_MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import ExitPreview from '~/components/ExitPreview'
@@ -13,16 +13,22 @@ import {getPrompts} from '~/queries/prompts.groq'
 import {getServices} from '~/queries/services.groq'
 import {getTestimonials} from '~/queries/testimonials.groq'
 import {getSession} from '~/sessions'
-import type {GlobalDocument} from '~/types/global'
-import type {HomeDocument} from '~/types/home'
+import type {loader as rootLoader} from '../root'
 
-export const meta: MetaFunction = (data) => {
-  const global = data.parentsData.root.global as GlobalDocument
-  const home = data.data.home as HomeDocument
+export const meta: V2_MetaFunction<typeof loader, {root: typeof rootLoader}> = ({
+  data,
+  matches,
+}) => {
+  const rootMeta = matches[0].meta
+  const rootData = matches[0].data
+  const title = data?.home?.title
 
-  return {
-    title: [home.title, global.siteTitle].filter(Boolean).join(' | '),
-  }
+  return [
+    ...rootMeta,
+    {
+      title: [title, rootData.global?.siteTitle].filter(Boolean).join(' | '),
+    },
+  ]
 }
 
 function getPromiseValue<T>(result: PromiseSettledResult<T>) {

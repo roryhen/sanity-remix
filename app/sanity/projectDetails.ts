@@ -21,6 +21,6 @@ export const projectDetails = (): ProjectDetails => {
   return {
     projectId: SANITY_PUBLIC_PROJECT_ID ?? ``,
     dataset: SANITY_PUBLIC_DATASET ?? ``,
-    apiVersion: SANITY_PUBLIC_API_VERSION ?? `2022-09-19`,
+    apiVersion: SANITY_PUBLIC_API_VERSION ?? `2023-07-20`,
   }
 }

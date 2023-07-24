@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderArgs, V2_MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
@@ -13,10 +13,10 @@ import {
 import styles from '~/tailwind.css'
 import {getGlobal} from './queries/global.groq'
 
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  viewport: 'width=device-width,initial-scale=1',
-})
+export const meta: V2_MetaFunction = () => [
+  {charSet: 'utf-8'},
+  {name: 'viewport', content: 'width=device-width,initial-scale=1'},
+]
 
 export const links: LinksFunction = () => {
   return [
