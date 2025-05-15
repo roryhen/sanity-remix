@@ -1,4 +1,4 @@
-import {NavLink} from '@remix-run/react'
+import {NavLink} from 'react-router'
 
 type Props = {
   isShown?: boolean
@@ -7,7 +7,7 @@ type Props = {
 export default function Navigation(props: Props) {
   return (
     <nav
-      className={`before:clip-right-triangle fixed top-24 right-4 left-4 bg-white p-6 text-very-dark-gray-blue transition-all duration-200 ease-out before:absolute before:-top-8 before:right-0 before:block before:h-8 before:w-8 before:bg-white lg:visible lg:relative lg:right-auto  lg:left-auto lg:top-0 lg:translate-y-0 lg:bg-transparent lg:p-0 lg:text-white lg:opacity-100 lg:before:hidden ${
+      className={`before:clip-right-triangle fixed left-4 right-4 top-24 bg-white p-6 text-very-dark-gray-blue transition-all duration-200 ease-out before:absolute before:-top-8 before:right-0 before:block before:h-8 before:w-8 before:bg-white lg:visible lg:relative lg:left-auto lg:right-auto lg:top-0 lg:translate-y-0 lg:bg-transparent lg:p-0 lg:text-white lg:opacity-100 lg:before:hidden ${
         props.isShown ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-3 opacity-0'
       }`}
       aria-label="main"

@@ -1,5 +1,5 @@
 import groq from 'groq'
-import {getClient} from '~/sanity/client'
+import {client} from '~/sanity/client'
 import {promptZ} from '~/types/prompt'
 
 export const promptsQuery = groq`*[_type == "prompt"]{
@@ -9,6 +9,6 @@ export const promptsQuery = groq`*[_type == "prompt"]{
 }`
 
 export async function getPrompts(preview: boolean = false) {
-  const res = await getClient(preview).fetch(promptsQuery)
+  const res = await client.fetch(promptsQuery)
   return res ? promptZ.partial().array().parse(res) : null
 }

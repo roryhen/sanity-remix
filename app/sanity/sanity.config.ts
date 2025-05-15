@@ -1,17 +1,31 @@
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
-import {deskTool} from 'sanity/desk'
-
-import {projectDetails} from '~/sanity/projectDetails'
+import {presentationTool} from 'sanity/presentation'
+import {structureTool} from 'sanity/structure'
+import {dataset, projectId} from '~/sanity/projectDetails'
 import schema from '~/sanity/schema'
-import {structure, defaultDocumentNode} from '~/sanity/structure'
+import {resolve} from './presentation/resolve'
+import {structure} from './structure'
 
 export const config = defineConfig({
-  ...projectDetails(),
-  name: 'sanity-remix',
-  title: 'Sanity Remix',
-  plugins: [deskTool({structure, defaultDocumentNode}), visionTool()],
-  basePath: `/studio`,
+  projectId,
+  dataset,
+  name: 'sanity-react-router',
+  title: 'Sanity React Router',
+  plugins: [
+    structureTool({structure}),
+    presentationTool({
+      resolve,
+      previewUrl: {
+        previewMode: {
+          enable: '/resource/preview/enable',
+        },
+      },
+    }),
+    visionTool(),
+  ],
+  useCdn: false,
+  basePath: '/studio',
   schema: {
     types: schema,
   },

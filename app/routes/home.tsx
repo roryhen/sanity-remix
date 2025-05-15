@@ -1,6 +1,3 @@
-import type {LoaderArgs, V2_MetaFunction} from '@remix-run/node'
-import {json} from '@remix-run/node'
-import {useLoaderData} from '@remix-run/react'
 import ExitPreview from '~/components/ExitPreview'
 import Hero from '~/components/Hero'
 import ImageWithCaption from '~/components/ImageWithCaption'
@@ -13,12 +10,9 @@ import {getPrompts} from '~/queries/prompts.groq'
 import {getServices} from '~/queries/services.groq'
 import {getTestimonials} from '~/queries/testimonials.groq'
 import {getSession} from '~/sessions'
-import type {loader as rootLoader} from '../root'
+import type {Route} from './+types/home'
 
-export const meta: V2_MetaFunction<typeof loader, {root: typeof rootLoader}> = ({
-  data,
-  matches,
-}) => {
+export const meta: Route.MetaFunction = ({data, matches}) => {
   const rootMeta = matches[0].meta
   const rootData = matches[0].data
   const title = data?.home?.title
@@ -35,7 +29,7 @@ function getPromiseValue<T>(result: PromiseSettledResult<T>) {
   return result.status === 'fulfilled' ? result.value : null
 }
 
-export const loader = async ({params, request}: LoaderArgs) => {
+export const loader = async ({request}: Route.LoaderArgs) => {
   const session = await getSession(request.headers.get('Cookie'))
   const token = session.get('token')
   const preview = Boolean(token)
@@ -47,17 +41,17 @@ export const loader = async ({params, request}: LoaderArgs) => {
     getTestimonials(preview),
   ])
 
-  return json({
+  return {
     preview,
     home: getPromiseValue(home),
     prompts: getPromiseValue(prompts),
     services: getPromiseValue(services),
     testimonials: getPromiseValue(testimonials),
-  })
+  }
 }
 
-export default function Index() {
-  const {preview, home, prompts, services, testimonials} = useLoaderData<typeof loader>()
+export default function Index({loaderData}: Route.ComponentProps) {
+  const {preview, home, prompts, services, testimonials} = loaderData
 
   return (
     <Layout>
@@ -101,11 +95,11 @@ export default function Index() {
           </ImageWithCaption>
         ))}
       </section>
-      <section className="mx-auto px-8 py-16 lg:container lg:py-36 lg:px-20">
+      <section className="mx-auto px-8 py-16 lg:container lg:px-20 lg:py-36">
         <h2 className="mb-16 text-center font-serif uppercase tracking-[0.3em] text-dark-gray-blue lg:text-lg">
           Client Testimonials
         </h2>
-        <div className="grid gap-y-20 gap-x-10 lg:grid-flow-col">
+        <div className="grid gap-x-10 gap-y-20 lg:grid-flow-col">
           {testimonials?.map((testimonial, i) => (
             <Quote
               quote={testimonial.description}
@@ -134,7 +128,7 @@ export default function Index() {
                 alt=""
                 key={i}
               />
-            )
+            ),
         )}
       </div>
       {preview && <ExitPreview />}

@@ -1,7 +1,7 @@
-import {Link, useRouteLoaderData} from '@remix-run/react'
 import Logo from '~/components/Logo'
 import type {GlobalDocument} from '~/types/global'
-import {Facebook, Instagram, Twitter, Youtube} from 'lucide-react'
+import {Link, useRouteLoaderData} from 'react-router'
+import {Facebook, Instagram, Twitter, Youtube} from './icons'
 
 const icons = {
   facebook: Facebook,
@@ -15,22 +15,22 @@ export default function Footer() {
 
   return (
     <header className="bg-very-light-green text-dark-mod-green">
-      <div className="container mx-auto grid justify-items-center gap-10 py-16 px-8">
+      <div className="container mx-auto grid justify-items-center gap-10 px-8 py-16">
         <Logo footer />
         <nav aria-label="footer">
           <ul className="flex items-center gap-8">
             <li>
-              <Link to="#about" className=" p-3">
+              <Link to="#about" className="p-3">
                 About
               </Link>
             </li>
             <li>
-              <Link to="#services" className=" p-3">
+              <Link to="#services" className="p-3">
                 Services
               </Link>
             </li>
             <li>
-              <Link to="#projects" className=" p-3">
+              <Link to="#projects" className="p-3">
                 Projects
               </Link>
             </li>

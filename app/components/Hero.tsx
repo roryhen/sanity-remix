@@ -1,4 +1,4 @@
-import arrowSVG from 'public/icons/icon-arrow-down.svg'
+import arrowSVG from '/icons/icon-arrow-down.svg?url'
 import {urlFor} from '~/lib/imageBuilder'
 
 type Props = {

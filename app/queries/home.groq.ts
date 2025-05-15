@@ -1,5 +1,5 @@
 import groq from 'groq'
-import {getClient} from '~/sanity/client'
+import {client} from '~/sanity/client'
 import {homeZ} from '~/types/home'
 
 export const homeQuery = groq`*[_type == "home"][0]{
@@ -11,6 +11,6 @@ export const homeQuery = groq`*[_type == "home"][0]{
 }`
 
 export async function getHome(preview: boolean = false) {
-  const res = await getClient(preview).fetch(homeQuery)
+  const res = await client.fetch(homeQuery)
   return res ? homeZ.partial().parse(res) : null
 }

@@ -1,4 +1,4 @@
-import {Link} from '@remix-run/react'
+import {Link} from 'react-router'
 
 type Props = {
   imageOnRight?: boolean
@@ -13,9 +13,9 @@ export default function ImageWithText(props: Props) {
     <section>
       <div className="grid lg:auto-cols-fr lg:grid-flow-col">
         {props.children && (
-          <div className={`${props.imageOnRight ? ' lg:col-start-2' : ''}`}>{props.children}</div>
+          <div className={`${props.imageOnRight ? 'lg:col-start-2' : ''}`}>{props.children}</div>
         )}
-        <div className="grid max-w-xl justify-items-center  gap-6 place-self-center px-8 py-12 text-center lg:max-w-md lg:justify-items-start lg:text-left">
+        <div className="grid max-w-xl justify-items-center gap-6 place-self-center px-8 py-12 text-center lg:max-w-md lg:justify-items-start lg:text-left">
           {props.heading && (
             <h2 className="font-serif text-3xl leading-tight text-very-dark-desat-blue">
               {props.heading}

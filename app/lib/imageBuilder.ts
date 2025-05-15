@@ -1,12 +1,8 @@
 import imageUrlBuilder from '@sanity/image-url'
-import {projectDetails} from '~/sanity/projectDetails'
+import {dataset, projectId} from '~/sanity/projectDetails'
 
-// Get a pre-configured url-builder from your sanity client
-const builder = imageUrlBuilder(projectDetails())
+const builder = imageUrlBuilder({dataset, projectId})
 
-// Then we like to make a simple function like this that gives the
-// builder an image and returns the builder for you to specify additional
-// parameters:
 export function urlFor(source: string) {
   return builder.image(source)
 }

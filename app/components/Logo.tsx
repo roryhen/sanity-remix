@@ -1,4 +1,4 @@
-import {Link, useRouteLoaderData} from '@remix-run/react'
+import {Link, useRouteLoaderData} from 'react-router'
 import {urlFor} from '~/lib/imageBuilder'
 import type {GlobalDocument} from '~/types/global'
 

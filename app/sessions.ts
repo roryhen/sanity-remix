@@ -1,14 +1,16 @@
-// https://remix.run/docs/en/v1/api/remix#sessions
-import {createCookieSessionStorage} from '@remix-run/node'
+import {createCookieSessionStorage} from 'react-router'
+
+export const PREVIEW_SESSION_NAME = '__preview'
+
+if (!process.env.SANITY_SESSION_SECRET) {
+  throw new Error(`Missing SANITY_SESSION_SECRET in .env`)
+}
 
 const {getSession, commitSession, destroySession} = createCookieSessionStorage({
   cookie: {
-    name: '__session',
-    httpOnly: true,
-    maxAge: 60,
+    name: PREVIEW_SESSION_NAME,
+    secrets: [process.env.SANITY_SESSION_SECRET],
     sameSite: 'lax',
-    secrets: [],
-    secure: true,
   },
 })
 

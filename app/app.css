@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --color-soft-red: hsl(7, 99%, 70%);
+  --color-yellow: hsl(51, 100%, 49%);
+  --color-very-light-yellow: hsl(20, 100%, 99%);
+  --color-dark-desat-green: hsl(167, 40%, 24%);
+  --color-dark-blue: hsl(198, 62%, 26%);
+  --color-dark-mod-green: hsl(168, 34%, 41%);
+  --color-very-light-green: hsl(168, 44%, 70%);
+  --color-very-dark-desat-blue: hsl(212, 27%, 19%);
+  --color-very-dark-gray-blue: hsl(213, 9%, 39%);
+  --color-dark-gray-blue: hsl(232, 10%, 55%);
+  --color-gray-blue: hsl(210, 4%, 67%);
+  --color-cyan: hsl(200, 100%, 62%);
+
+  --font-sans: Barlow, sans-serif;
+  --font-serif: Fraunces, serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 1rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.5rem;
+}
+
+@utility clip-right-triangle {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}

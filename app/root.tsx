@@ -1,24 +1,20 @@
-import type {LinksFunction, LoaderArgs, V2_MetaFunction} from '@remix-run/node'
-import {json} from '@remix-run/node'
+import {VisualEditing} from '@sanity/visual-editing/react-router'
 import {
+  isRouteErrorResponse,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
-  useLocation,
-} from '@remix-run/react'
-import styles from '~/tailwind.css'
+  useRouteLoaderData,
+} from 'react-router'
+import styles from '~/app.css?url'
+import type {Route} from './+types/root'
+import {DisablePreviewMode} from './components/DisablePreviewMode'
 import {getGlobal} from './queries/global.groq'
+import {loadQueryOptions} from './sanity/loadQueryOptions'
 
-export const meta: V2_MetaFunction = () => [
-  {charSet: 'utf-8'},
-  {name: 'viewport', content: 'width=device-width,initial-scale=1'},
-]
-
-export const links: LinksFunction = () => {
+export const links: Route.LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: styles},
     {rel: 'preconnect', href: 'https://cdn.sanity.io'},
@@ -39,43 +35,80 @@ export const links: LinksFunction = () => {
   ]
 }
 
-export const loader = async ({request}: LoaderArgs) => {
+export const loader = async ({request}: Route.LoaderArgs) => {
+  const {preview} = await loadQueryOptions(request.headers)
   const global = await getGlobal()
 
-  return json({
+  return {
     global,
+    preview,
     ENV: {
-      SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
-      SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
-      SANITY_PUBLIC_API_VERSION: process.env.SANITY_PUBLIC_API_VERSION,
+      SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
+      SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
+      SANITY_STUDIO_URL: process.env.SANITY_STUDIO_URL,
+      SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
     },
-  })
+  }
 }
 
-export default function App() {
-  const {ENV} = useLoaderData<typeof loader>()
-
-  const {pathname} = useLocation()
-  const isStudioRoute = pathname.startsWith('/studio')
+export function Layout({children}: {children: React.ReactNode}) {
+  const {preview, ENV} = useRouteLoaderData('root')
 
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
       <body className="bg-very-light-yellow text-base leading-relaxed">
-        <Outlet />
+        {children}
         <ScrollRestoration />
+        <Scripts />
+        {preview ? (
+          <>
+            <DisablePreviewMode />
+            <VisualEditing />
+          </>
+        ) : null}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
           }}
         />
-        <Scripts />
-        <LiveReload />
       </body>
     </html>
+  )
+}
+
+export default function App() {
+  return <Outlet />
+}
+
+export function ErrorBoundary({error}: Route.ErrorBoundaryProps) {
+  let message = 'Oops!'
+  let details = 'An unexpected error occurred.'
+  let stack: string | undefined
+
+  if (isRouteErrorResponse(error)) {
+    message = error.status === 404 ? '404' : 'Error'
+    details =
+      error.status === 404 ? 'The requested page could not be found.' : error.statusText || details
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message
+    stack = error.stack
+  }
+
+  return (
+    <main className="container mx-auto p-4 pt-16">
+      <h1>{message}</h1>
+      <p>{details}</p>
+      {stack && (
+        <pre className="w-full overflow-x-auto p-4">
+          <code>{stack}</code>
+        </pre>
+      )}
+    </main>
   )
 }
