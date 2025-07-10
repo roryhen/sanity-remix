@@ -3,8 +3,9 @@ node_modules
 /.cache
 /build
 /public/build
-/.netlify
 .env
 !.env.template
+.netlify
+.vercel
+.react-router
 
-app/styles/app.css

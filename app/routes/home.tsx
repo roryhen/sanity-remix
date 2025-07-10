@@ -1,65 +1,62 @@
-import ExitPreview from '~/components/ExitPreview'
+import {useQuery} from '@sanity/react-loader'
 import Hero from '~/components/Hero'
 import ImageWithCaption from '~/components/ImageWithCaption'
 import ImageWithText from '~/components/ImageWithText'
-import Layout from '~/components/Layout'
 import Quote from '~/components/Quote'
 import {urlFor} from '~/lib/imageBuilder'
-import {getHome} from '~/queries/home.groq'
-import {getPrompts} from '~/queries/prompts.groq'
-import {getServices} from '~/queries/services.groq'
-import {getTestimonials} from '~/queries/testimonials.groq'
-import {getSession} from '~/sessions'
+import {loadQuery} from '~/sanity/loader.server'
+import {loadQueryOptions} from '~/sanity/loadQueryOptions'
+import {HomeDocument, homeQuery} from '~/types/home'
+import {PromptDocument, promptsQuery} from '~/types/prompts'
+import {ServiceDocument, servicesQuery} from '~/types/services'
+import {TestimonialDocument, testimonialsQuery} from '~/types/testimonials'
 import type {Route} from './+types/home'
 
 export const meta: Route.MetaFunction = ({data, matches}) => {
-  const rootMeta = matches[0].meta
-  const rootData = matches[0].data
-  const title = data?.home?.title
+  const title = data?.home.data.title
+  const siteTitle = matches[1].data.initial.data.siteTitle
 
   return [
-    ...rootMeta,
     {
-      title: [title, rootData.global?.siteTitle].filter(Boolean).join(' | '),
+      title: [title, siteTitle].filter(Boolean).join(' | '),
     },
   ]
 }
 
-function getPromiseValue<T>(result: PromiseSettledResult<T>) {
-  return result.status === 'fulfilled' ? result.value : null
-}
-
 export const loader = async ({request}: Route.LoaderArgs) => {
-  const session = await getSession(request.headers.get('Cookie'))
-  const token = session.get('token')
-  const preview = Boolean(token)
-
-  const [home, prompts, services, testimonials] = await Promise.allSettled([
-    getHome(preview),
-    getPrompts(preview),
-    getServices(preview),
-    getTestimonials(preview),
+  const params = {}
+  const {options} = await loadQueryOptions(request.headers)
+  const [home, prompts, services, testimonials] = await Promise.all([
+    loadQuery<HomeDocument>(homeQuery, params, options),
+    loadQuery<PromptDocument[]>(promptsQuery, params, options),
+    loadQuery<ServiceDocument[]>(servicesQuery, params, options),
+    loadQuery<TestimonialDocument[]>(testimonialsQuery, params, options),
   ])
 
   return {
-    preview,
-    home: getPromiseValue(home),
-    prompts: getPromiseValue(prompts),
-    services: getPromiseValue(services),
-    testimonials: getPromiseValue(testimonials),
+    home,
+    prompts,
+    services,
+    testimonials,
   }
 }
 
 export default function Index({loaderData}: Route.ComponentProps) {
-  const {preview, home, prompts, services, testimonials} = loaderData
+  const params = {}
+  const {data: home} = useQuery<HomeDocument>(homeQuery, params, {initial: loaderData.home})
+  const {data: prompts} = useQuery<PromptDocument[]>(promptsQuery, params, {
+    initial: loaderData.prompts,
+  })
+  const {data: services} = useQuery<ServiceDocument[]>(servicesQuery, params, {
+    initial: loaderData.services,
+  })
+  const {data: testimonials} = useQuery<TestimonialDocument[]>(testimonialsQuery, params, {
+    initial: loaderData.testimonials,
+  })
 
   return (
-    <Layout>
-      <Hero
-        darkBG
-        title={home?.title}
-        image={{id: home?.heroImage ?? '', alt: 'Close up of orange slice'}}
-      />
+    <>
+      <Hero darkBG title={home.title} image={home.hero} />
       {prompts?.map((prompt, i) => (
         <ImageWithText
           heading={prompt.title}
@@ -72,7 +69,7 @@ export default function Index({loaderData}: Route.ComponentProps) {
             <img
               className="h-full w-full object-cover"
               src={urlFor(prompt.image).width(800).auto('format').url()}
-              alt={prompt.title ?? ''}
+              alt={prompt.image.alt ?? prompt.title ?? ''}
             />
           )}
         </ImageWithText>
@@ -89,14 +86,14 @@ export default function Index({loaderData}: Route.ComponentProps) {
               <img
                 className="h-full w-full object-cover"
                 src={urlFor(service.image).width(800).auto('format').url()}
-                alt={service.title ?? ''}
+                alt={service.image.alt ?? service.title ?? ''}
               />
             )}
           </ImageWithCaption>
         ))}
       </section>
       <section className="mx-auto px-8 py-16 lg:container lg:px-20 lg:py-36">
-        <h2 className="mb-16 text-center font-serif uppercase tracking-[0.3em] text-dark-gray-blue lg:text-lg">
+        <h2 className="text-dark-gray-blue mb-16 text-center font-serif tracking-[0.3em] uppercase lg:text-lg">
           Client Testimonials
         </h2>
         <div className="grid gap-x-10 gap-y-20 lg:grid-flow-col">
@@ -111,7 +108,7 @@ export default function Index({loaderData}: Route.ComponentProps) {
                 <img
                   className="h-full w-full rounded-full object-cover"
                   src={urlFor(testimonial.image).width(80).auto('format').url()}
-                  alt={testimonial.title ?? ''}
+                  alt={testimonial.image.alt ?? testimonial.title ?? ''}
                 />
               )}
             </Quote>
@@ -120,18 +117,17 @@ export default function Index({loaderData}: Route.ComponentProps) {
       </section>
       <div className="grid grid-cols-2 lg:grid-cols-4">
         {home?.gallery?.map(
-          (item, i) =>
-            item.image && (
+          (image, i) =>
+            image && (
               <img
                 className="-ml-[0.1px] aspect-square h-full w-full object-cover lg:aspect-auto"
-                src={urlFor(item.image).width(500).auto('format').url()}
-                alt=""
+                src={urlFor(image).width(500).auto('format').url()}
+                alt={image.alt ?? ''}
                 key={i}
               />
             ),
         )}
       </div>
-      {preview && <ExitPreview />}
-    </Layout>
+    </>
   )
 }

@@ -4,8 +4,9 @@ import {presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 import {dataset, projectId} from '~/sanity/projectDetails'
 import schema from '~/sanity/schema'
-import {resolve} from './presentation/resolve'
-import {structure} from './structure'
+import {resolve} from '~/sanity/presentation/resolve'
+import {structure} from '~/sanity/structure'
+import {STUDIO_BASEPATH} from '~/sanity/constants'
 
 export const config = defineConfig({
   projectId,
@@ -18,13 +19,13 @@ export const config = defineConfig({
       resolve,
       previewUrl: {
         previewMode: {
-          enable: '/resource/preview/enable',
+          enable: '/resource/preview',
         },
       },
     }),
     visionTool(),
   ],
-  basePath: '/studio',
+  basePath: STUDIO_BASEPATH,
   useCdn: false,
   schema: {types: schema},
 })

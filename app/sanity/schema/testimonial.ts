@@ -1,34 +1,40 @@
-import {defineType, defineField} from 'sanity'
+import {defineType} from 'sanity'
 
 export default defineType({
   name: 'testimonial',
   title: 'Testimonial',
   type: 'document',
   fields: [
-    defineField({
+    {
       name: 'avatar',
       type: 'image',
       options: {hotspot: true},
-    }),
-    defineField({
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+        },
+      ],
+    },
+    {
       name: 'name',
       type: 'string',
-    }),
-    defineField({
+    },
+    {
       name: 'slug',
       type: 'slug',
       options: {
         source: 'name',
       },
-    }),
-    defineField({
+    },
+    {
       name: 'title',
       type: 'string',
       description: 'Profession or role',
-    }),
-    defineField({
+    },
+    {
       name: 'description',
       type: 'text',
-    }),
+    },
   ],
 })

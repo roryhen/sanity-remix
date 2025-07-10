@@ -1,5 +1,5 @@
 import {Studio, type Config} from 'sanity'
-import {config} from '~/sanity/sanity.config'
+import {config} from 'sanity.config'
 
 export default function StudioRoute() {
   return (

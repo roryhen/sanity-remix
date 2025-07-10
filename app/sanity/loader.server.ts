@@ -1,17 +1,13 @@
 import * as queryStore from '@sanity/react-loader'
 
 import {client} from '~/sanity/client'
-import {studioUrl} from './projectDetails'
-
-const token = process.env.SANITY_READ_TOKEN
-
-if (!token) {
-  throw new Error('Missing SANITY_READ_TOKEN in .env')
-}
+import {STUDIO_BASEPATH} from './constants'
 
 const clientWithToken = client.withConfig({
-  token,
-  stega: {studioUrl},
+  // Token required for when perspective: 'previewDrafts'
+  token: process.env.SANITY_READ_TOKEN,
+  // Minimum required stega config
+  stega: {studioUrl: STUDIO_BASEPATH},
 })
 
 queryStore.setServerClient(clientWithToken)

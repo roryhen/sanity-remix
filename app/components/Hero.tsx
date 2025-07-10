@@ -1,13 +1,11 @@
+import {SanityImage} from '~/types/common'
 import arrowSVG from '/icons/icon-arrow-down.svg?url'
 import {urlFor} from '~/lib/imageBuilder'
 
 type Props = {
   title?: string | null
   darkBG?: boolean
-  image?: {
-    id: string
-    alt: string
-  }
+  image?: SanityImage
 }
 
 export default function Hero(props: Props) {
@@ -18,14 +16,14 @@ export default function Hero(props: Props) {
           props.darkBG ? 'text-white' : ''
         }`}
       >
-        {props.image?.id && (
+        {props.image && (
           <img
             className="col-start-1 row-span-full h-full w-full object-cover object-bottom"
-            src={urlFor(props.image.id).width(1920).auto('format').url()}
-            alt={props.image?.alt}
+            src={urlFor(props.image).width(1920).auto('format').url()}
+            alt={props.image.alt ?? ''}
           />
         )}
-        <h1 className="col-start-1 row-start-2 self-center p-4 text-center font-serif text-4xl uppercase leading-tight tracking-[0.3em] lg:text-6xl">
+        <h1 className="col-start-1 row-start-2 self-center p-4 text-center font-serif text-4xl leading-tight tracking-[0.3em] uppercase lg:text-6xl">
           {props.title}
         </h1>
         <img

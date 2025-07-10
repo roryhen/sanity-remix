@@ -1,26 +1,51 @@
+// None of these are secrets, but all of them are required
+// Throughout the app server and client side
 declare global {
   interface Window {
     ENV: {
-      SANITY_STUDIO_PROJECT_ID: string
-      SANITY_STUDIO_DATASET: string
-      SANITY_STUDIO_URL: string
-      SANITY_STUDIO_API_VERSION: string
+      VITE_SANITY_PROJECT_ID: string
+      VITE_SANITY_DATASET: string
+      VITE_SANITY_API_VERSION: string
     }
   }
 }
 
-const {
-  SANITY_STUDIO_PROJECT_ID,
-  SANITY_STUDIO_DATASET,
-  SANITY_STUDIO_URL,
-  SANITY_STUDIO_API_VERSION,
-} = typeof document === 'undefined' ? process.env : window.ENV
+let projectId: string
+let dataset: string
+let apiVersion: string
+const defaultApiVersion = `2024-11-01`
 
-if (!SANITY_STUDIO_PROJECT_ID) throw new Error('Missing SANITY_STUDIO_PROJECT_ID in .env')
-if (!SANITY_STUDIO_DATASET) throw new Error('Missing SANITY_STUDIO_DATASET in .env')
-if (!SANITY_STUDIO_URL) throw new Error('Missing SANITY_STUDIO_URL in .env')
+if (typeof document === 'undefined') {
+  if (typeof process !== 'undefined') {
+    projectId = process.env.VITE_SANITY_PROJECT_ID!
+    dataset = process.env.VITE_SANITY_DATASET!
+    apiVersion = process.env.VITE_SANITY_API_VERSION ?? defaultApiVersion
+  } else {
+    projectId = import.meta.env.VITE_SANITY_PROJECT_ID
+    dataset = import.meta.env.VITE_SANITY_DATASET
+    apiVersion = import.meta.env.VITE_SANITY_API_VERSION ?? defaultApiVersion
+  }
+} else {
+  projectId = window.ENV.VITE_SANITY_PROJECT_ID
+  dataset = window.ENV.VITE_SANITY_DATASET
+  apiVersion = window.ENV.VITE_SANITY_API_VERSION ?? defaultApiVersion
+}
 
-export const projectId = SANITY_STUDIO_PROJECT_ID
-export const dataset = SANITY_STUDIO_DATASET
-export const studioUrl = SANITY_STUDIO_URL
-export const apiVersion = SANITY_STUDIO_API_VERSION || '2024-11-01'
+export {apiVersion, dataset, projectId}
+
+export const projectDetails = () => ({
+  projectId,
+  dataset,
+  apiVersion,
+})
+
+// If any of these values are missing, throw errors as the app requires them
+if (!projectId) {
+  throw new Error(`Missing VITE_SANITY_PROJECT_ID in .env, run npx sanity@latest init --env`)
+}
+if (!dataset) {
+  throw new Error(`Missing VITE_SANITY_DATASET in .env, run npx sanity@latest init --env`)
+}
+if (!apiVersion) {
+  throw new Error(`Missing VITE_SANITY_API_VERSION in .env, run npx sanity@latest init --env`)
+}

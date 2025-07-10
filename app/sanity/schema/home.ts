@@ -1,22 +1,38 @@
-import {defineType, defineField} from 'sanity'
+import {defineType} from 'sanity'
 
 export default defineType({
   name: 'home',
   title: 'Home',
   type: 'document',
   fields: [
-    defineField({
+    {
       name: 'title',
       type: 'string',
-    }),
-    defineField({
+    },
+    {
       name: 'hero',
       type: 'image',
-    }),
-    defineField({
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+        },
+      ],
+    },
+    {
       name: 'gallery',
       type: 'array',
-      of: [{type: 'image'}],
-    }),
+      of: [
+        {
+          type: 'image',
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+            },
+          ],
+        },
+      ],
+    },
   ],
 })

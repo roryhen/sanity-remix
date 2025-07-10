@@ -2,14 +2,15 @@ import Logo from '~/components/Logo'
 import Navigation from '~/components/Navigation'
 import hamburgerIcon from '/icons/icon-hamburger.svg?url'
 import {useState} from 'react'
+import {GlobalDocument} from '~/types/global'
 
-export default function Header() {
+export default function Header({global}: {global: GlobalDocument}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-10 bg-cyan">
+    <header className="bg-cyan fixed top-0 right-0 left-0 z-10">
       <div className="container mx-auto flex items-center justify-between px-4 py-7 lg:px-12">
-        <Logo />
+        <Logo global={global} />
         <Navigation isShown={isOpen} />
         <button
           className="lg:hidden"

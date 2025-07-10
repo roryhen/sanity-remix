@@ -1,15 +1,15 @@
-import {defineField, defineType} from 'sanity'
+import {defineType} from 'sanity'
 
 export default defineType({
   name: 'social',
   title: 'Social',
   type: 'document',
   fields: [
-    defineField({
+    {
       name: 'url',
       type: 'url',
-    }),
-    defineField({
+    },
+    {
       name: 'icon',
       type: 'string',
       options: {
@@ -20,6 +20,6 @@ export default defineType({
           {title: 'Pinterest', value: 'pinterest'},
         ],
       },
-    }),
+    },
   ],
 })

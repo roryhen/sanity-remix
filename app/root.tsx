@@ -1,4 +1,3 @@
-import {VisualEditing} from '@sanity/visual-editing/react-router'
 import {
   isRouteErrorResponse,
   Links,
@@ -6,13 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteLoaderData,
+  useLoaderData,
 } from 'react-router'
 import styles from '~/app.css?url'
 import type {Route} from './+types/root'
-import {DisablePreviewMode} from './components/DisablePreviewMode'
-import {getGlobal} from './queries/global.groq'
-import {loadQueryOptions} from './sanity/loadQueryOptions'
+import {projectDetails} from './sanity/projectDetails'
 
 export const links: Route.LinksFunction = () => {
   return [
@@ -35,24 +32,20 @@ export const links: Route.LinksFunction = () => {
   ]
 }
 
-export const loader = async ({request}: Route.LoaderArgs) => {
-  const {preview} = await loadQueryOptions(request.headers)
-  const global = await getGlobal()
+export const loader = async ({}: Route.LoaderArgs) => {
+  const {projectId, dataset, apiVersion} = projectDetails()
 
   return {
-    global,
-    preview,
     ENV: {
-      SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
-      SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
-      SANITY_STUDIO_URL: process.env.SANITY_STUDIO_URL,
-      SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
+      VITE_SANITY_PROJECT_ID: projectId,
+      VITE_SANITY_DATASET: dataset,
+      VITE_SANITY_API_VERSION: apiVersion,
     },
   }
 }
 
 export function Layout({children}: {children: React.ReactNode}) {
-  const {preview, ENV} = useRouteLoaderData('root')
+  const {ENV} = useLoaderData<typeof loader>()
 
   return (
     <html lang="en">
@@ -66,12 +59,6 @@ export function Layout({children}: {children: React.ReactNode}) {
         {children}
         <ScrollRestoration />
         <Scripts />
-        {preview ? (
-          <>
-            <DisablePreviewMode />
-            <VisualEditing />
-          </>
-        ) : null}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
@@ -82,8 +69,8 @@ export function Layout({children}: {children: React.ReactNode}) {
   )
 }
 
-export default function App() {
-  return <Outlet />
+export default function App({loaderData}: Route.ComponentProps) {
+  return <Outlet context={loaderData} />
 }
 
 export function ErrorBoundary({error}: Route.ErrorBoundaryProps) {

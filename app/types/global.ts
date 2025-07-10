@@ -1,3 +1,4 @@
+import groq from 'groq'
 import {z} from 'zod'
 
 export const globalZ = z.object({
@@ -8,3 +9,13 @@ export const globalZ = z.object({
 })
 
 export type GlobalDocument = z.infer<typeof globalZ>
+
+export const globalQuery = groq`*[_type == "global"][0]{
+  siteTitle,
+  logo,
+  footerLogo,
+  socialLinks[]{
+    url,
+    icon,
+  }
+}`

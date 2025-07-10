@@ -1,28 +1,27 @@
-import {Link, useRouteLoaderData} from 'react-router'
+import {Link} from 'react-router'
 import {urlFor} from '~/lib/imageBuilder'
 import type {GlobalDocument} from '~/types/global'
 
 type Props = {
   footer?: boolean
+  global?: GlobalDocument
 }
 
-export default function Logo(props: Props) {
-  const {global} = useRouteLoaderData('root') as {global: GlobalDocument}
-
-  const logo = props.footer ? global.footerLogo : global.logo
+export default function Logo({footer, global}: Props) {
+  const logo = footer ? global?.footerLogo : global?.logo
 
   return (
     <p className="text-xl font-bold">
       <Link to="/">
         {logo ? (
           <img
-            className={props.footer ? 'w-48' : undefined}
+            className={footer ? 'w-48' : undefined}
             src={urlFor(logo).url()}
-            alt={global.siteTitle ?? 'Sunnyside'}
-            title={global.siteTitle ?? 'Sunnyside'}
+            alt={global?.siteTitle ?? 'Sunnyside'}
+            title={global?.siteTitle ?? 'Sunnyside'}
           />
         ) : (
-          global.siteTitle
+          global?.siteTitle
         )}
       </Link>
     </p>
