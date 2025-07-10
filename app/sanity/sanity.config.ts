@@ -24,6 +24,7 @@ export const config = defineConfig({
     }),
     visionTool(),
   ],
+  basePath: '/studio',
   useCdn: false,
   schema: {types: schema},
 })

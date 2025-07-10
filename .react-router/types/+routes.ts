@@ -24,12 +24,17 @@ type Pages = {
       "*": string;
     };
   };
+  "/*": {
+    params: {
+      "*": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/resource/preview/enable" | "/resource/preview/disable" | "/studio/*";
+    page: "/" | "/resource/preview/enable" | "/resource/preview/disable" | "/studio/*" | "/*";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -46,5 +51,9 @@ type RouteFiles = {
   "routes/studio.tsx": {
     id: "routes/studio";
     page: "/studio/*";
+  };
+  "routes/404.tsx": {
+    id: "routes/404";
+    page: "/*";
   };
 };
